@@ -63,7 +63,7 @@ $scope.previewModal = new simpleModal();
 
 
 	setInterval(function(){
-		$http.get('/api/michael')
+		$http.get('/api/party/michael')
 		.success(function(data) {
 			temp = data['Contents'].reverse();
 			if($scope.pics.length != temp.length)

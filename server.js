@@ -5,13 +5,28 @@ AWS.config.loadFromPath('./config.json');
 var s3 = new AWS.S3(); 
 
 function getFiles(party,fn){
-	s3.client.listObjects({"Bucket":"partypic", "Prefix":party+"/"}, function(err, data){
-	
-	
+	s3.client.listObjects({"Bucket":"partypic", "Prefix":party+"/"}, function(err, data){	
 	fn(err, data);
 });
 }
 
+//register user
+
+function registerUser(params){
+
+}
+
+//add party
+
+function addParty(params){
+
+}
+
+//upload pic
+
+function uploadPic(params){
+
+}
 
 
 var io = require('socket.io').listen(8080);
@@ -38,7 +53,7 @@ app.configure(function() {
 
 
 
-app.get('/api/:party', function(req, res) {
+app.get('/api/party/:party', function(req, res) {
 
 		getFiles(req.params.party, function(err, data){
 			res.json(data);
