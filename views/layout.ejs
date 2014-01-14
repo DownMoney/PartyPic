@@ -1,0 +1,57 @@
+<html ng-app="Pics">
+<!--
+      ___                       ___           ___           ___     
+     /\  \          ___        /\__\         /\  \         /\  \    
+    /::\  \        /\  \      /:/  /        /::\  \       /::\  \   
+   /:/\:\  \       \:\  \    /:/  /        /:/\:\  \     /:/\:\  \  
+  /::\~\:\  \      /::\__\  /:/__/  ___   /::\~\:\  \   /::\~\:\  \ 
+ /:/\:\ \:\__\  __/:/\/__/  |:|  | /\__\ /:/\:\ \:\__\ /:/\:\ \:\__\
+ \/_|::\/:/  / /\/:/  /     |:|  |/:/  / \:\~\:\ \/__/ \/_|::\/:/  /
+    |:|::/  /  \::/__/      |:|__/:/  /   \:\ \:\__\      |:|::/  / 
+    |:|\/__/    \:\__\       \::::/__/     \:\ \/__/      |:|\/__/  
+    |:|  |       \/__/        ~~~~          \:\__\        |:|  |    
+     \|__|                                   \/__/         \|__|    
+
+By David Hariri, 2014
+http://www.dhariri.com
+-->
+<head>
+    <title>Michael's Party</title>
+    <!-- So Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="/styles/normal.css">
+    <link rel="stylesheet" type="text/css" href="/styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="/styles/stroll.css">
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <!-- Scripts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+    <script src="http://code.angularjs.org/1.2.7/angular-animate.min.js"></script>
+   <script src="/js/stroll.js"></script>
+    <script src="/js/core.js"></script>
+    <!-- Humans -->
+    <link rel="author" href="humans.txt">
+</head>
+<body>
+<div class="nav"><h1><%= title %></h1>
+</div>
+
+<div style="width:100%">
+  <%- body -%>
+</div>
+      
+ 
+
+</body>
+
+<script>
+            stroll.bind( 'ul' );
+        
+        </script>
+
+</html>

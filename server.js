@@ -10,6 +10,20 @@ function getFiles(party,fn){
 });
 }
 
+
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/pp');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function callback () {
+  // yay!
+
+  console.log('OK!');
+});
+
 //register user
 
 function registerUser(params){
@@ -29,29 +43,27 @@ function uploadPic(params){
 }
 
 
-var io = require('socket.io').listen(8080);
-
-io.sockets.on('connection', function (socket) {
-	setInterval(function(){
-		getFiles('michael',function(e,d){
-	  	 socket.emit('refresh', {files:d});
-	  });
-	}, 1000);
-  
- 
-});
-
-
 var express  = require('express');
 var app      = express(); 	
-app.configure(function() {
-		app.use(express.static(__dirname + '/public')); 		// set the static files location /public/img will be /img for users
-		app.use(express.logger('dev')); 						// log every request to the console
-		app.use(express.bodyParser()); 							// pull information from html in POST
-		app.use(express.methodOverride()); 						// simulate DELETE and PUT
-	});
+var engine = require('ejs-locals');
+var path = require('path');
+var User = require('./models/user');
 
 
+app.engine('ejs', engine);
+app.set('port', process.env.PORT || 3000);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+
+app.use(express.methodOverride());
+app.use(express.cookieParser('haha this is a very funny secret'));
+app.use(express.session());
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(app.router);
 
 app.get('/api/party/:party', function(req, res) {
 
@@ -61,11 +73,11 @@ app.get('/api/party/:party', function(req, res) {
 		
 	});
 
-app.get('/', function(req, res) {
-		res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+app.get('/party/:party', function(req, res) {
+		res.render('party', {party: req.params.party, title: "Michael's Party"}); // load the single view file (angular will handle the page changes on the front-end)
 	});
 
 	// listen (start app with node server.js) ======================================
-	app.listen(8081);
-	console.log("App listening on port 8081");
+	app.listen(3000);
+	console.log("App listening on port 3000");
 

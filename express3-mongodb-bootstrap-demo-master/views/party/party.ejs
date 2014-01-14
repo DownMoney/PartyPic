@@ -1,0 +1,40 @@
+<% layout(layoutPath) -%>
+<script type="text/javascript">
+  var partyID = '<%= party %>';
+</script>
+
+<div ng-controller="mainController" style="width:100%">
+    <ul id="content" class="posts flip"  ng-class="{blurred: blurred}">
+
+        <div class="loading"></div>
+        <li class="post" id="" ng-repeat="pic in pics" >
+  
+     <div ng-click="toggle(pic)" >
+
+  <div class="icons">
+    <span class="logo">
+    &#xe100;
+      
+    </span><br>
+    <span class="logo category">
+     
+    </span>
+  </div>
+  
+  <div class="attachment" ng-style="setBackground(pic.Key)"></div>
+  
+  <div class="content">
+    <span class="date">{{ pic.LastModified | date:'medium'}}</span><br>
+    <span class="text">Michael Lotkowski</span>
+  </div>
+  
+  </div>
+   
+
+</li>
+
+    </ul>
+
+    <div id="modal" ng-show="previewModal.visible" class="ng-cloak" ng-class="previewModal.cls" ng-style="setBackground(current)" ng-click="previewModal.close()" lazy-loader="#lazySpinner" lazy-background="current.image + '_b.jpg'"></div>
+
+</div>
