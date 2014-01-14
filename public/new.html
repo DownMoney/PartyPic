@@ -1,0 +1,89 @@
+<html ng-app="Pics">
+<!--
+      ___                       ___           ___           ___     
+     /\  \          ___        /\__\         /\  \         /\  \    
+    /::\  \        /\  \      /:/  /        /::\  \       /::\  \   
+   /:/\:\  \       \:\  \    /:/  /        /:/\:\  \     /:/\:\  \  
+  /::\~\:\  \      /::\__\  /:/__/  ___   /::\~\:\  \   /::\~\:\  \ 
+ /:/\:\ \:\__\  __/:/\/__/  |:|  | /\__\ /:/\:\ \:\__\ /:/\:\ \:\__\
+ \/_|::\/:/  / /\/:/  /     |:|  |/:/  / \:\~\:\ \/__/ \/_|::\/:/  /
+    |:|::/  /  \::/__/      |:|__/:/  /   \:\ \:\__\      |:|::/  / 
+    |:|\/__/    \:\__\       \::::/__/     \:\ \/__/      |:|\/__/  
+    |:|  |       \/__/        ~~~~          \:\__\        |:|  |    
+     \|__|                                   \/__/         \|__|    
+
+By David Hariri, 2014
+http://www.dhariri.com
+-->
+<head>
+    <title>Michael's Party</title>
+    <!-- So Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="styles/normal.css">
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/stroll.css">
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <!-- Scripts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+    <script src="http://code.angularjs.org/1.2.7/angular-animate.min.js"></script>
+   <script src="js/stroll.js"></script>
+    <script src="core.js"></script>
+    <!-- Humans -->
+    <link rel="author" href="humans.txt">
+</head>
+<body>
+<div class="nav"><h1>Michael's Party</h1>
+</div>
+<div ng-controller="mainController" style="width:100%">
+    <ul id="content" class="posts flip"  ng-class="{blurred: blurred}">
+
+        <div class="loading"></div>
+        <li class="post" id="" ng-repeat="pic in pics" >
+  
+     <div ng-click="toggle(pic)" >
+
+  <div class="icons">
+    <span class="logo">
+    &#xe100;
+      
+    </span><br>
+    <span class="logo category">
+     
+    </span>
+  </div>
+  
+  <div class="attachment" ng-style="setBackground(pic.Key)"></div>
+  
+  <div class="content">
+    <span class="date">{{ pic.LastModified | date:'medium'}}</span><br>
+    <span class="text">Michael Lotkowski</span>
+  </div>
+  
+  </div>
+   
+
+</li>
+
+    </ul>
+
+    <div id="modal" ng-show="previewModal.visible" class="ng-cloak" ng-class="previewModal.cls" ng-style="setBackground(current)" ng-click="previewModal.close()" lazy-loader="#lazySpinner" lazy-background="current.image + '_b.jpg'"></div>
+
+</div>
+
+      
+ 
+
+</body>
+
+<script>
+            stroll.bind( 'ul' );
+        
+        </script>
+
+</html>
