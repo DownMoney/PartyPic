@@ -14,15 +14,19 @@ exports.dashboard = function(req, res){
 
 // Authenticate user
 exports.authenticate = function(req, res, next) {
+  console.log(req.body);
   passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err); }
+    if (err) { console.log(err); return next(err); }
     if (!user) { 
       req.flash('error', info.message);
+      console.log('E'+info.message);
       return res.redirect(req.body.postAuthDestination ? '/login?postAuthDestination='+req.body.postAuthDestination : '/login');
     }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
-      return res.redirect(req.body.postAuthDestination ? req.body.postAuthDestination : '/dashboard');
+      console.log('OK');
+      return res.json(user);
+      //return res.redirect(req.body.postAuthDestination ? req.body.postAuthDestination : '/dashboard');
     });
   })(req, res, next);
 }
@@ -94,6 +98,7 @@ exports.update = function(req, res, next){
 
 // Create user
 exports.create = function(req, res, next){
+  console.log(req.body);
   var newUser = new User(req.body);
   newUser.save(function(err, user){
     
@@ -102,6 +107,7 @@ exports.create = function(req, res, next){
     if (err && err.code == 11000){
       var duplicatedAttribute = err.err.split("$")[1].split("_")[0];
       req.flash('error', "That " + duplicatedAttribute + " is already in use.");
+      console.log("That " + duplicatedAttribute + " is already in use.");
       return res.render('users/new', {user : newUser, errorMessages: req.flash('error')});
     }
     if(err) return next(err);
@@ -110,6 +116,7 @@ exports.create = function(req, res, next){
     
     req.login(user, function(err) {
       if (err) { return next(err); }
+      console.log("Account created successfully!");
       req.flash('success', "Account created successfully!");
       return res.redirect('/dashboard');
     });
@@ -118,21 +125,25 @@ exports.create = function(req, res, next){
 
 // Validations for user objects upon user update or create
 exports.userValidations = function(req, res, next){
+  console.log(req.body);
   var creatingUser = req.url == "/register";
   var updatingUser = !creatingUser; // only to improve readability
   req.assert('email', 'You must provide an email address.').notEmpty();
-  req.assert('firstName', 'First Name is required.').notEmpty();
-  req.assert('lastName', 'Last Name is required.').notEmpty();
+  //req.assert('firstName', 'First Name is required.').notEmpty();
+  //req.assert('lastName', 'Last Name is required.').notEmpty();
   req.assert('email', 'Your email address must be valid.').isEmail();
-  req.assert('username', 'Username is required.').notEmpty();
+  //req.assert('username', 'Username is required.').notEmpty();
+  console.log(req.body.password);
   if(creatingUser || (updatingUser && req.body.password)){
-    req.assert('password', 'Your password must be 6 to 20 characters long.').len(6, 20);
+    req.assert('password', 'Your password must be 6 to 20 characters long.').len(6, 50);
+    console.log('sdds');
   }
   var validationErrors = req.validationErrors() || [];
-  if (req.body.password != req.body.passwordConfirmation) validationErrors.push({msg:"Password and password confirmation did not match."});
+  //if (req.body.password != req.body.passwordConfirmation) validationErrors.push({msg:"Password and password confirmation did not match."});
   if (validationErrors.length > 0){
     validationErrors.forEach(function(e){
       req.flash('error', e.msg);
+      console.log(e.msg);
     });
     // Create handling if errors present
     if (creatingUser) return res.render('users/new', {user : new User(req.body), errorMessages: req.flash('error')});

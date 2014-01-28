@@ -18,10 +18,12 @@ var express = require('express')
   , mongoose = require('mongoose')
   , PartModel = require('./models/party')
   , Party = mongoose.model('Party')
+  , party = require('./controllers/party')
   , PictureModel = require('./models/picture')
   , Picture = mongoose.model('Picture')
   , UserModel = require('./models/user')
   , User = mongoose.model('User')
+  , picture = require('./controllers/picture')
   , welcome = require('./controllers/welcome')
   , users = require('./controllers/users')
   , http = require('http')
@@ -93,7 +95,7 @@ if ('development' == app.get('env')) {
 // Database Connection
 
 if ('development' == app.get('env')) {
-  mongoose.connect('mongodb://localhost/nodedemo');
+  mongoose.connect('mongodb://localhost/nodedemo2');
 } else {
   // insert db connection for production
 }
@@ -110,9 +112,10 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
+passport.use(new LocalStrategy({ usernameField: 'email' },
+  function(email, password, done) {
+    console.log('ssdsddddd');
+    User.findOne({ email: email }, function (err, user) {
       if (err) return done(err);
       if (!user) return done(null, false, { message: "Sorry, we don't recognize that username." });
       user.validPassword(password, function(err, isMatch){
@@ -144,14 +147,14 @@ app.get('/reset_password', redirectAuthenticated, users.reset_password);
 app.post('/reset_password', redirectAuthenticated, users.generate_password_reset);
 app.get('/password_reset', redirectAuthenticated, users.password_reset);
 app.post('/password_reset', redirectAuthenticated, users.process_password_reset);
-app.post('/login', redirectAuthenticated, users.authenticate);
+app.post('/api/login',users.authenticate);
 app.get('/register', redirectAuthenticated, users.register);
-app.post('/register', redirectAuthenticated, users.userValidations, users.create);
+app.post('/api/register', redirectAuthenticated, users.userValidations, users.create);
 app.get('/account', ensureAuthenticated, users.account);
 app.post('/account', ensureAuthenticated, users.userValidations, users.update);
 app.get('/dashboard', ensureAuthenticated, users.dashboard);
 app.get('/logout', users.logout);
-app.get('/users', ensureAuthenticated, users.list); // for illustrative purposes only
+app.get('/users',  users.list); // for illustrative purposes only
 
 app.get('/api/party/:party', function(req, res) {
 
@@ -161,11 +164,21 @@ app.get('/api/party/:party', function(req, res) {
     
   });
 
-app.post('/api/picture/upload', function(req, res){
-    
+
+
+app.post('/api/test', function(req, res){
+  console.log('HEllo');
+  console.log(req.body['password']);
+  res.json({"response": "ok"});
 });
 
-app.get('/party/:party', function(req, res) {
+
+app.post('/api/picture/upload', ensureAuthenticated, picture.upload);
+
+app.post('/api/party/create', ensureAuthenticated, party.createParty);
+app.get('/api/parties/:lat/:lon', ensureAuthenticated, party.getParties);
+
+app.get('/api/party/:party', function(req, res) {
     res.render('party/party', {party: req.params.party, title: "Michael's Party"}); // load the single view file (angular will handle the page changes on the front-end)
   });
 
