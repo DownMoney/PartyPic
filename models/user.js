@@ -3,16 +3,18 @@ var mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
   , SALT_WORK_FACTOR = 10;
 
-
 var UserSchema = new Schema({
-	createdAt : { type: Date, default: Date.now },
-	firstName : String,
-	lastName : String,
-	email : String,
-	password : String
+  createdAt : { type: Date, default: Date.now },  
+  email : { type: String, required: true, index: { unique: true } },
+  password : { type: String, required: true },
+  resetPasswordToken : { type: String, required: false },
+  resetPasswordTokenCreatedAt : { type: Date },
+  profilePic : {type: String, required: false}
 });
 
+
 UserSchema.pre('save', function(next) {
+  console.log('SAVING');
   var user = this;
 
   // only hash the password if it has been modified (or is new)
